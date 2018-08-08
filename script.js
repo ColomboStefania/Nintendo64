@@ -22,18 +22,17 @@ const getDetails = (name) => {
     request
     .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
           .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
-        //   'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Credentials" :'false' 
+
         })
           .then(res => {
               add(JSON.parse(res.body[0].id))
               console.log(JSON.parse(res.body[0].id))
               console.log(arrayKeys)
-            //   handleObject (arrayKeys)
             })
         .then (arraykeys => { if (arrayKeys.length > 1) {handleObject (arrayKeys)}
             console.log("ciao")
         })
-          .catch(e => console.log("error", e))
+        .catch(e => console.log("error", e))
 }
 
 let scores = []
@@ -41,9 +40,8 @@ let scores = []
 const getObject = (key) => {
     request
     .get(`https://api-endpoint.igdb.com/games/${key}`)
-          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json',
-        //    'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Credentials" :'false' 
-        })
+          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
+    })
           .then(res => {
               console.log(res.body[0].name)
               console.log(res.body[0].popularity)
@@ -52,7 +50,9 @@ const getObject = (key) => {
                   score: 0,
                   pop:   res.body[0].popularity,
               }
-              scores.push(thing)
+              
+              
+                scores.push(thing)
               // console.log(arrayKeys) 
               return res
         })
@@ -82,7 +82,6 @@ const getObject = (key) => {
              
                     if (scores.length === 2) {
                         let higherScore = (scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-                        // maxScores.push(scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
 
                         console.log(scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
                       
@@ -90,14 +89,11 @@ const getObject = (key) => {
                         console.log(maxScoresObjects)
                         let winnerFound = document.getElementById("winner")
                         if (maxScoresObjects.length > 1) {
-                        maxScoresObjects.map(item =>  winnerFound.innerHTML = item )}
-                        else {winnerFound.innerHTML =  maxScoresObjects
-
+                            maxScoresObjects.map(item =>  winnerFound.innerHTML =  item )
                         }
-                        // const winnerFinder = (scores.filter( item => item.score === higherScore))[0].name
-                        // console.log(winnerFinder)
-                        // let winnerFound = document.getElementById("winner")
-                        // winnerFound.innerHTML = winnerFinder
+                        else { 
+                            winnerFound.innerHTML =  maxScoresObjects
+                        }
                         return false
                     };
                 }
@@ -106,24 +102,15 @@ const getObject = (key) => {
                 list.append(listButton)
                 list.append(voteCounter)
 
-           
-                // const findWinner = scores
-                // if (scores.length === 2) {
-                // console.log(findWinner.map(item => item.score).reduce((total, num) => total + num, 0)) }
-
-                // let winner = document.getElementById("winner")
-                // if (winner !== "") {
-                // winner.innerHTML = winner}
+        
             })
                         
-        // .then(function(){
-        //                     window.console.log('all set...')
-        //                   })
           .catch(e => console.log("error", e))
 }
 
 const handleResult = (data) => {
-    data.map(async d => {
+    data.map(
+        async (d) => {
       try {
         getDetails(d)
       } catch (e) {
@@ -142,8 +129,5 @@ const handleObject = (key) => {
     })
   }
 
-
-// handleResult (arrayNames)
-// handleObject (arrayKeys)
 
 module.exports = handleResult (arrayNames)
