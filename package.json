@@ -1,0 +1,10 @@
+{
+  "name": "BloqHouse",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "^3.8.3",
+    "uniq": "^1.0.1"
+  }
+}
