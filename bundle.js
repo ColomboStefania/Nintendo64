@@ -1,75 +1,20 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-"use strict"
-
-function unique_pred(list, compare) {
-  var ptr = 1
-    , len = list.length
-    , a=list[0], b=list[0]
-  for(var i=1; i<len; ++i) {
-    b = a
-    a = list[i]
-    if(compare(a, b)) {
-      if(i === ptr) {
-        ptr++
-        continue
-      }
-      list[ptr++] = a
-    }
-  }
-  list.length = ptr
-  return list
-}
-
-function unique_eq(list) {
-  var ptr = 1
-    , len = list.length
-    , a=list[0], b = list[0]
-  for(var i=1; i<len; ++i, b=a) {
-    b = a
-    a = list[i]
-    if(a !== b) {
-      if(i === ptr) {
-        ptr++
-        continue
-      }
-      list[ptr++] = a
-    }
-  }
-  list.length = ptr
-  return list
-}
-
-function unique(list, compare, sorted) {
-  if(list.length === 0) {
-    return list
-  }
-  if(compare) {
-    if(!sorted) {
-      list.sort(compare)
-    }
-    return unique_pred(list, compare)
-  }
-  if(!sorted) {
-    list.sort()
-  }
-  return unique_eq(list)
-}
-
-module.exports = unique
-
-},{}],2:[function(require,module,exports){
 const request = require("superagent")
-const unique = require("uniq")
+// const unique = require("uniq")
 
 const arrayKeys  = []
 let scores = []
 const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
 //  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
 ]
-// const arrayFetchedNames = []
+
 const loading1 = () => {
     if (scores.length < 2) {
     console.log('loading')
+    const loadingContainer = document.getElementById("loading")
+    const loadingShow = document.createElement("h1")
+    loadingShow.innerHTML = "loading"
+    loadingContainer.append(loadingShow)
     }
     return false
 }     
@@ -104,19 +49,18 @@ const getObject = (key) => {
           .then(res => {
               console.log(res.body[0].name)
               console.log(res.body[0].popularity)
-              let thing = {
+              let schema = {
                   name:  res.body[0].name,
                   score: 0,
                   pop:   res.body[0].popularity,
               }
-                scores.push(thing)
-              return res
-        })
+                scores.push(schema)
+                    return res
+            })
             .then(res => {
                 let name = res.body[0].name
                 let list = document.getElementById("list")
                 let listItem = document.createElement("li")
-                // listItem.cssText = color = "tomato"
                 let listButton = document.createElement("button")
                 let voteCounter = document.createElement("span")
                 listItem.innerHTML = name
@@ -151,7 +95,6 @@ const getObject = (key) => {
                         }
                         return false
                     } 
-                   
                 }
                 list.append(listItem)
                 list.append(listButton)
@@ -184,13 +127,13 @@ const handleObject = (key) => {
 
 module.exports = handleResult (arrayNames)
 module.exports = loading1 ()
-},{"superagent":6,"uniq":1}],3:[function(require,module,exports){
+},{"superagent":5}],2:[function(require,module,exports){
 
 const handleResult = require ('./script')
 const loading1 = require ('./script')
 
-
-},{"./script":2}],4:[function(require,module,exports){
+// {name: "Super Mario 64", score: 1, pop: 27.33333333333333}
+},{"./script":1}],3:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -355,7 +298,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 function Agent() {
   this._defaults = [];
 }
@@ -377,7 +320,7 @@ Agent.prototype._setDefaults = function(req) {
 
 module.exports = Agent;
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /**
  * Root reference for iframes.
  */
@@ -1299,7 +1242,7 @@ request.put = function(url, data, fn) {
   return req;
 };
 
-},{"./agent-base":5,"./is-object":7,"./request-base":8,"./response-base":9,"component-emitter":4}],7:[function(require,module,exports){
+},{"./agent-base":4,"./is-object":6,"./request-base":7,"./response-base":8,"component-emitter":3}],6:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1316,7 +1259,7 @@ function isObject(obj) {
 
 module.exports = isObject;
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2012,7 +1955,7 @@ RequestBase.prototype._setTimeouts = function() {
   }
 };
 
-},{"./is-object":7}],9:[function(require,module,exports){
+},{"./is-object":6}],8:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2150,7 +2093,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
     this.unprocessableEntity = 422 == status;
 };
 
-},{"./utils":10}],10:[function(require,module,exports){
+},{"./utils":9}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2223,4 +2166,4 @@ exports.cleanHeader = function(header, changesOrigin){
   return header;
 };
 
-},{}]},{},[3]);
+},{}]},{},[2]);

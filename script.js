@@ -1,14 +1,19 @@
 const request = require("superagent")
-const unique = require("uniq")
+// const unique = require("uniq")
 
 const arrayKeys  = []
 let scores = []
 const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
 //  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
 ]
+
 const loading1 = () => {
     if (scores.length < 2) {
     console.log('loading')
+    const loadingContainer = document.getElementById("loading")
+    const loadingShow = document.createElement("h1")
+    loadingShow.innerHTML = "loading"
+    loadingContainer.append(loadingShow)
     }
     return false
 }     
@@ -58,7 +63,7 @@ const getObject = (key) => {
                 let listButton = document.createElement("button")
                 let voteCounter = document.createElement("span")
                 listItem.innerHTML = name
-                listItem.setAttribute("class","display-4");
+                listItem.setAttribute("class","h1");
                 listButton.innerHTML = "VOTE!"
                 listButton.setAttribute("class","btn btn-success");
                 voteCounter.setAttribute("class", "badge badge-primary badge-pill")

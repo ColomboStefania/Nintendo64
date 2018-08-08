@@ -11,6 +11,7 @@ button {
     width: 150px;
     left:50%;
     margin: auto;
+    margin-top: 10px;
 }
 
 li {
@@ -22,7 +23,7 @@ badge {
     font-size: 90% !important;
 }
 
-element.style {
+button.style {
     
     margin-top: 10px;
 }
