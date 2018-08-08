@@ -7,17 +7,7 @@
     "superagent": "^3.8.3",
     "uniq": "^1.0.1"
   },
-  "devDependencies": {
-    "eslint": "^5.3.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.2.0"
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "prettier --write '{*.{js,jsx},!(node*|dist*)**/**/*.{js,jsx}}'",
-      "git add"
-    ]
-  },
+
   "repository": "git@github.com:ColomboStefania/Nintendo64.git",
   "author": "ColomboStefania <stefania.colombo3@gmail.com>"
 }
