@@ -1,28 +1,28 @@
-
 const request = require("superagent")
 const unique = require("uniq")
 
-// let val = hello(); // val is "Hello";
-// document.getElementById("demo").innerHTML = (val)
-
-
 const arrayKeys  = []
-const arrayFetchedNames = []
+let scores = []
+const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
+//  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
+]
+const loading1 = () => {
+    if (scores.length < 2) {
+    console.log('loading')
+    }
+    return false
+}     
+
 const add = (data) => { 
     if (!arrayKeys.includes (data)) {
     arrayKeys.push(data)
-console.log(arrayKeys)}
+    console.log(arrayKeys)}
 }
-
-const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
-//  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards'
-]
 
 const getDetails = (name) => {
     request
     .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
           .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
-
         })
           .then(res => {
               add(JSON.parse(res.body[0].id))
@@ -35,37 +35,33 @@ const getDetails = (name) => {
         .catch(e => console.log("error", e))
 }
 
-let scores = []
-
 const getObject = (key) => {
     request
     .get(`https://api-endpoint.igdb.com/games/${key}`)
           .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
-    })
+            })
           .then(res => {
               console.log(res.body[0].name)
               console.log(res.body[0].popularity)
-              let thing = {
+              let schema = {
                   name:  res.body[0].name,
                   score: 0,
                   pop:   res.body[0].popularity,
               }
-              
-              
-                scores.push(thing)
-              // console.log(arrayKeys) 
-              return res
-        })
+                scores.push(schema)
+                    return res
+            })
             .then(res => {
                 let name = res.body[0].name
-                // arrayFetchedNames.push(res.body[0].name)
                 let list = document.getElementById("list")
                 let listItem = document.createElement("li")
-                listItem.cssText = "color: tomato"
                 let listButton = document.createElement("button")
-                let voteCounter = document.createElement("p")
+                let voteCounter = document.createElement("span")
                 listItem.innerHTML = name
-                listButton.innerHTML = "+"
+                listItem.setAttribute("class","display-4");
+                listButton.innerHTML = "VOTE!"
+                listButton.setAttribute("class","btn btn-success");
+                voteCounter.setAttribute("class", "badge badge-primary badge-pill")
                 let count = 0;
                 let maxScoresObjects = []
                 listButton.onclick = function () {
@@ -75,16 +71,13 @@ const getObject = (key) => {
                         }
                         return datum
                     })
-                
                     console.log(scores)
                     count += 1;
                     voteCounter.innerHTML = count; 
              
                     if (scores.length === 2) {
                         let higherScore = (scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-
                         console.log(scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-                      
                         maxScoresObjects.push((scores.filter( item => item.score === higherScore).map (item => item.name)))
                         console.log(maxScoresObjects)
                         let winnerFound = document.getElementById("winner")
@@ -95,16 +88,12 @@ const getObject = (key) => {
                             winnerFound.innerHTML =  maxScoresObjects
                         }
                         return false
-                    };
+                    } 
                 }
-            
                 list.append(listItem)
                 list.append(listButton)
                 list.append(voteCounter)
-
-        
             })
-                        
           .catch(e => console.log("error", e))
 }
 
@@ -131,3 +120,4 @@ const handleObject = (key) => {
 
 
 module.exports = handleResult (arrayNames)
+module.exports = loading1 ()

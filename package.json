@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^4.1.3",
     "superagent": "^3.8.3",
     "uniq": "^1.0.1"
   },
-
   "repository": "git@github.com:ColomboStefania/Nintendo64.git",
   "author": "ColomboStefania <stefania.colombo3@gmail.com>"
 }
