@@ -12,18 +12,19 @@ button {
     left:50%;
     margin: auto;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 li {
     text-align: center;
     font-size: 30px
 }
-badge {
-    line-height: 0 !important;
-    font-size: 90% !important;
-}
+
 
 button.style {
-    
     margin-top: 10px;
+}
+
+.list-group {
+    background-color: antiquewhite
 }

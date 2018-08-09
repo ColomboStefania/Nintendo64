@@ -1,90 +1,78 @@
 const request = require("superagent")
-// const unique = require("uniq")
+
 
 const arrayKeys  = []
 let scores = []
-const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
-//  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
+const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64', 'Super Smash Bros',
+//  'Star Fox 64', 'Banjo-Kazooie', 'GoldenEye 007','F-Zero X','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
 ]
-
-const loading1 = () => {
-    if (scores.length < 2) {
-    console.log('loading')
-    const loadingContainer = document.getElementById("loading")
-    const loadingShow = document.createElement("h1")
-    loadingShow.innerHTML = "loading"
-    loadingContainer.append(loadingShow)
-    }
-    return false
-}     
-
-const add = (data) => { 
-    if (!arrayKeys.includes (data)) {
-    arrayKeys.push(data)
-    console.log(arrayKeys)}
-}
-
+ 
 const getDetails = (name) => {
     request
     .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
-          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
+          .set({'user-key': 'a9132414f209b09fd79f6929b1b335b0',accept: 'application/json'
         })
           .then(res => {
               add(JSON.parse(res.body[0].id))
-              console.log(JSON.parse(res.body[0].id))
-              console.log(arrayKeys)
             })
-        .then (arraykeys => { if (arrayKeys.length > 1) {handleObject (arrayKeys)}
-            console.log("ciao")
+        .then (arraykeys => { 
+            if (arrayKeys.length > 0) {
+                getObject (arrayKeys.slice(-1).pop())
+            }
+         
         })
         .catch(e => console.log("error", e))
 }
 
+const add = (data) => { 
+    if (!arrayKeys.includes (data)) {
+    arrayKeys.push(data)
+    }
+}
+
+
 const getObject = (key) => {
     request
     .get(`https://api-endpoint.igdb.com/games/${key}`)
-          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
+          .set({'user-key': 'a9132414f209b09fd79f6929b1b335b0',accept: 'application/json'
             })
           .then(res => {
-              console.log(res.body[0].name)
-              console.log(res.body[0].popularity)
               let schema = {
                   name:  res.body[0].name,
                   score: 0,
-                  pop:   res.body[0].popularity,
               }
                 scores.push(schema)
-                    return res
+                return res
             })
             .then(res => {
-                let name = res.body[0].name
+                let name = (res.body[0].name)
                 let list = document.getElementById("list")
                 let listItem = document.createElement("li")
                 let listButton = document.createElement("button")
                 let voteCounter = document.createElement("span")
                 listItem.innerHTML = name
-                listItem.setAttribute("class","h1");
+                listItem.setAttribute("class","h2");
                 listButton.innerHTML = "VOTE!"
                 listButton.setAttribute("class","btn btn-success");
                 voteCounter.setAttribute("class", "badge badge-primary badge-pill")
+                
                 let count = 0;
                 let maxScoresObjects = []
                 listButton.onclick = function () {
-                    scores = scores.map( (datum) => {
+                    scores.map( (datum) => {
                         if (datum.name === name) {
                             datum.score += 1
-                        }
-                        return datum
+                    }
+                    return datum
                     })
-                    console.log(scores)
                     count += 1;
                     voteCounter.innerHTML = count; 
+
+                   
              
-                    if (scores.length === 2) {
+                    if (scores.length > 0) {
                         let higherScore = (scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-                        console.log(scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
                         maxScoresObjects.push((scores.filter( item => item.score === higherScore).map (item => item.name)))
-                        console.log(maxScoresObjects)
                         let winnerFound = document.getElementById("winner")
                         if (maxScoresObjects.length > 1) {
                             maxScoresObjects.map(item =>  winnerFound.innerHTML =  item )
@@ -92,9 +80,11 @@ const getObject = (key) => {
                         else { 
                             winnerFound.innerHTML =  maxScoresObjects
                         }
-                        return false
+                        
+                         return false
                     } 
                 }
+          
                 list.append(listItem)
                 list.append(listButton)
                 list.append(voteCounter)
@@ -113,16 +103,5 @@ const handleResult = (data) => {
     })
 }
 
-const handleObject = (key) => {
-    key.map(async k => {
-      try {
-        getObject(k)
-      } catch (e) {
-        console.log(e)
-      }
-    })
-  }
-
 
 module.exports = handleResult (arrayNames)
-module.exports = loading1 ()
