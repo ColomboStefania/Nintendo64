@@ -2038,9 +2038,10 @@ const request = require("superagent")
 const arrayKeys  = []
 let scores = []
 const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64', 'Super Smash Bros',
-//  'Star Fox 64', 'Banjo-Kazooie', 'GoldenEye 007','F-Zero X','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
+ 'Star Fox 64', 'Banjo-Kazooie', 'GoldenEye 007','F-Zero X','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
 ]
  
+//first call to get the id of the top games
 const getDetails = (name) => {
     request
     .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
@@ -2064,7 +2065,7 @@ const add = (data) => {
     }
 }
 
-
+//second call to get the all the info about the games
 const getObject = (key) => {
     request
     .get(`https://api-endpoint.igdb.com/games/${key}`)
@@ -2074,6 +2075,7 @@ const getObject = (key) => {
               let schema = {
                   name:  res.body[0].name,
                   score: 0,
+                  pop: res.body[0].popularity,
               }
                 scores.push(schema)
                 return res
