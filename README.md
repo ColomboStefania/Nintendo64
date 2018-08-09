@@ -11,7 +11,7 @@ How to start with it
 
 
 Restrictions:
-- due to cors restriction users should istall a plug in called Cors
+- due to cors restriction users should install a plug in called Cors
 - The api requests are limited to 3k
 
 
