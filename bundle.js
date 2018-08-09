@@ -1,203 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-"use strict"
-
-function unique_pred(list, compare) {
-  var ptr = 1
-    , len = list.length
-    , a=list[0], b=list[0]
-  for(var i=1; i<len; ++i) {
-    b = a
-    a = list[i]
-    if(compare(a, b)) {
-      if(i === ptr) {
-        ptr++
-        continue
-      }
-      list[ptr++] = a
-    }
-  }
-  list.length = ptr
-  return list
-}
-
-function unique_eq(list) {
-  var ptr = 1
-    , len = list.length
-    , a=list[0], b = list[0]
-  for(var i=1; i<len; ++i, b=a) {
-    b = a
-    a = list[i]
-    if(a !== b) {
-      if(i === ptr) {
-        ptr++
-        continue
-      }
-      list[ptr++] = a
-    }
-  }
-  list.length = ptr
-  return list
-}
-
-function unique(list, compare, sorted) {
-  if(list.length === 0) {
-    return list
-  }
-  if(compare) {
-    if(!sorted) {
-      list.sort(compare)
-    }
-    return unique_pred(list, compare)
-  }
-  if(!sorted) {
-    list.sort()
-  }
-  return unique_eq(list)
-}
-
-module.exports = unique
-
-},{}],2:[function(require,module,exports){
-
-const request = require("superagent")
-const unique = require("uniq")
-
-// let val = hello(); // val is "Hello";
-// document.getElementById("demo").innerHTML = (val)
-
-
-const arrayKeys  = []
-const arrayFetchedNames = []
-const add = (data) => { 
-    if (!arrayKeys.includes (data)) {
-    arrayKeys.push(data)
-console.log(arrayKeys)}
-}
-
-const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64',
-//  'Star Fox 64', 'Super Smash Bros', 'Banjo-Kazooie', 'GoldenEye 007','Kirby 64: The Crystal Shards'
-]
-
-const getDetails = (name) => {
-    request
-    .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
-          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
-
-        })
-          .then(res => {
-              add(JSON.parse(res.body[0].id))
-              console.log(JSON.parse(res.body[0].id))
-              console.log(arrayKeys)
-            })
-        .then (arraykeys => { if (arrayKeys.length > 1) {handleObject (arrayKeys)}
-            console.log("ciao")
-        })
-          .catch(e => console.log("error", e))
-}
-
-let scores = []
-
-const getObject = (key) => {
-    request
-    .get(`https://api-endpoint.igdb.com/games/${key}`)
-          .set({'user-key': '84ea2324967cc3933cf9fb39e4f62206',accept: 'application/json'
-    })
-          .then(res => {
-              console.log(res.body[0].name)
-              console.log(res.body[0].popularity)
-              let thing = {
-                  name:  res.body[0].name,
-                  score: 0,
-                  pop:   res.body[0].popularity,
-              }
-              scores.push(thing)
-              // console.log(arrayKeys) 
-              return res
-        })
-            .then(res => {
-                let name = res.body[0].name
-                // arrayFetchedNames.push(res.body[0].name)
-                let list = document.getElementById("list")
-                let listItem = document.createElement("li")
-                listItem.cssText = "color: tomato"
-                let listButton = document.createElement("button")
-                let voteCounter = document.createElement("p")
-                listItem.innerHTML = name
-                listButton.innerHTML = "+"
-                let count = 0;
-                let maxScoresObjects = []
-                listButton.onclick = function () {
-                    scores = scores.map( (datum) => {
-                        if (datum.name === name) {
-                            datum.score += 1
-                        }
-                        return datum
-                    })
-                
-                    console.log(scores)
-                    count += 1;
-                    voteCounter.innerHTML = count; 
-             
-                    if (scores.length === 2) {
-                        let higherScore = (scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-
-                        console.log(scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
-                      
-                        maxScoresObjects.push((scores.filter( item => item.score === higherScore).map (item => item.name)))
-                        console.log(maxScoresObjects)
-                        let winnerFound = document.getElementById("winner")
-                        if (maxScoresObjects.length > 1) {
-                            maxScoresObjects.map(item =>  winnerFound.innerHTML = " " + item )
-                        }
-                        else { 
-                            winnerFound.innerHTML =  maxScoresObjects
-                        }
-                        return false
-                    };
-                }
-            
-                list.append(listItem)
-                list.append(listButton)
-                list.append(voteCounter)
-
-        
-            })
-                        
-          .catch(e => console.log("error", e))
-}
-
-const handleResult = (data) => {
-    data.map(async d => {
-      try {
-        getDetails(d)
-      } catch (e) {
-        console.log(e)
-      }
-    })
-}
-
-const handleObject = (key) => {
-    key.map(async k => {
-      try {
-        getObject(k)
-      } catch (e) {
-        console.log(e)
-      }
-    })
-  }
-
-
-module.exports = handleResult (arrayNames)
-},{"superagent":6,"uniq":1}],3:[function(require,module,exports){
-const handleResult = require ('./script')
-
-
-var print = handleResult
-
-
-// console.log(print)
-// console.log(print1)
-},{"./script":2}],4:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -362,7 +163,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 function Agent() {
   this._defaults = [];
 }
@@ -384,7 +185,7 @@ Agent.prototype._setDefaults = function(req) {
 
 module.exports = Agent;
 
-},{}],6:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /**
  * Root reference for iframes.
  */
@@ -1306,7 +1107,7 @@ request.put = function(url, data, fn) {
   return req;
 };
 
-},{"./agent-base":5,"./is-object":7,"./request-base":8,"./response-base":9,"component-emitter":4}],7:[function(require,module,exports){
+},{"./agent-base":2,"./is-object":4,"./request-base":5,"./response-base":6,"component-emitter":1}],4:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1323,7 +1124,7 @@ function isObject(obj) {
 
 module.exports = isObject;
 
-},{}],8:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2019,7 +1820,7 @@ RequestBase.prototype._setTimeouts = function() {
   }
 };
 
-},{"./is-object":7}],9:[function(require,module,exports){
+},{"./is-object":4}],6:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2157,7 +1958,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
     this.unprocessableEntity = 422 == status;
 };
 
-},{"./utils":10}],10:[function(require,module,exports){
+},{"./utils":7}],7:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2230,4 +2031,119 @@ exports.cleanHeader = function(header, changesOrigin){
   return header;
 };
 
-},{}]},{},[3]);
+},{}],8:[function(require,module,exports){
+const request = require("superagent")
+
+
+const arrayKeys  = []
+let scores = []
+const arrayNames = [ 'The Legend of Zelda: Ocarina of Time','Super Mario 64', 'Super Smash Bros',
+//  'Star Fox 64', 'Banjo-Kazooie', 'GoldenEye 007','F-Zero X','Kirby 64: The Crystal Shards', 'Perfect Dark', 'Paper Mario'
+]
+ 
+const getDetails = (name) => {
+    request
+    .get(`https://api-endpoint.igdb.com/games/?search=${name}`)
+          .set({'user-key': 'a9132414f209b09fd79f6929b1b335b0',accept: 'application/json'
+        })
+          .then(res => {
+              add(JSON.parse(res.body[0].id))
+            })
+        .then (arraykeys => { 
+            if (arrayKeys.length > 0) {
+                getObject (arrayKeys.slice(-1).pop())
+            }
+         
+        })
+        .catch(e => console.log("error", e))
+}
+
+const add = (data) => { 
+    if (!arrayKeys.includes (data)) {
+    arrayKeys.push(data)
+    }
+}
+
+
+const getObject = (key) => {
+    request
+    .get(`https://api-endpoint.igdb.com/games/${key}`)
+          .set({'user-key': 'a9132414f209b09fd79f6929b1b335b0',accept: 'application/json'
+            })
+          .then(res => {
+              let schema = {
+                  name:  res.body[0].name,
+                  score: 0,
+              }
+                scores.push(schema)
+                return res
+            })
+            .then(res => {
+                let name = (res.body[0].name)
+                let list = document.getElementById("list")
+                let listItem = document.createElement("li")
+                let listButton = document.createElement("button")
+                let voteCounter = document.createElement("span")
+                listItem.innerHTML = name
+                listItem.setAttribute("class","h2");
+                listButton.innerHTML = "VOTE!"
+                listButton.setAttribute("class","btn btn-success");
+                voteCounter.setAttribute("class", "badge badge-primary badge-pill")
+                
+                let count = 0;
+                let maxScoresObjects = []
+                listButton.onclick = function () {
+                    scores.map( (datum) => {
+                        if (datum.name === name) {
+                            datum.score += 1
+                    }
+                    return datum
+                    })
+                    count += 1;
+                    voteCounter.innerHTML = count; 
+
+                   
+             
+                    if (scores.length > 0) {
+                        let higherScore = (scores.reduce((max, p) => p.score > max ? p.score : max, scores[0].score))
+                        maxScoresObjects.push((scores.filter( item => item.score === higherScore).map (item => item.name)))
+                        let winnerFound = document.getElementById("winner")
+                        if (maxScoresObjects.length > 1) {
+                            maxScoresObjects.map(item =>  winnerFound.innerHTML =  item )
+                        }
+                        else { 
+                            winnerFound.innerHTML =  maxScoresObjects
+                        }
+                        
+                         return false
+                    } 
+                }
+          
+                list.append(listItem)
+                list.append(listButton)
+                list.append(voteCounter)
+            })
+          .catch(e => console.log("error", e))
+}
+
+const handleResult = (data) => {
+    data.map(
+        async (d) => {
+      try {
+        getDetails(d)
+      } catch (e) {
+        console.log(e)
+      }
+    })
+}
+
+
+module.exports = handleResult (arrayNames)
+
+},{"superagent":3}],9:[function(require,module,exports){
+
+const handleResult = require ('./script')
+
+
+
+},{"./script":8}]},{},[9]);
