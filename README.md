@@ -4,10 +4,10 @@ This is a tool that helps employees to make a democratic choice about what game 
 
 How to start with it
 
-.clone repository
-.yarn init
-.yarn install
-.open front.html  in your browser
+-clone repository
+-yarn init
+-yarn install
+-open front.html  in your browser
 
 
 Restrictions:
