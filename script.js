@@ -52,10 +52,19 @@ const getObject = (key) => {
             .then(res => {
                 let name = (res.body[0].name)
                 let list = document.getElementById("list")
+                let line = document.createElement("hr")
                 let listItem = document.createElement("li")
+                let rating = document.createElement("p")
                 let listButton = document.createElement("button")
+                let  description = document.createElement("p")
                 let voteCounter = document.createElement("span")
                 listItem.innerHTML = name
+                if (isNaN(res.body[0].rating)) {
+                    rating.innerHTML = "Rating: not defined"} 
+                    else {
+                    rating.innerHTML = "Rating " + Math.round( (res.body[0].rating) * 10 ) / 10
+                }
+                description.innerHTML = res.body[0].summary
                 listItem.setAttribute("class","h2");
                 listButton.innerHTML = "VOTE!"
                 listButton.setAttribute("class","btn btn-success");
@@ -90,10 +99,13 @@ const getObject = (key) => {
                          return false
                     } 
                 }
-          
+                list.append(line)
                 list.append(listItem)
-                list.append(listButton)
+                list.append(rating)
+                list.append(description)
                 list.append(voteCounter)
+                list.append(listButton)
+                
             })
           .catch(e => console.log("error", e))
 }

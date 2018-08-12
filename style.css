@@ -28,3 +28,8 @@ button.style {
 .list-group {
     background-color: antiquewhite
 }
+
+p {
+    padding-left: 10%;
+    padding-right: 10%
+}
